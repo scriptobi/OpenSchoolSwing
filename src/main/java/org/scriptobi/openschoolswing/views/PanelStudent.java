@@ -1,11 +1,17 @@
-package org.scriptobi.openschoolswing;
+package org.scriptobi.openschoolswing.views;
+
+import org.scriptobi.openschoolswing.controllers.Ctrl_Student;
+import org.scriptobi.openschoolswing.entities.EntityStudent;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.Timestamp;
 
 public class PanelStudent extends JPanel {
+    Connection cnx;
     JTextField fldMatricule;
     JTextField fldFirstname;
     JTextField fldLastname;
@@ -13,7 +19,8 @@ public class PanelStudent extends JPanel {
     JTextField fldCity;
     JButton btnSubmit;
 
-    public PanelStudent() {
+    public PanelStudent(Connection cnx) {
+        this.cnx = cnx;
         setLayout(new GridLayout(4, 3));
 
         JLabel lblMatricule = new JLabel("Matricule :");
@@ -48,7 +55,14 @@ public class PanelStudent extends JPanel {
         public void actionPerformed(ActionEvent e) {
             JButton btn = (JButton) e.getSource();
             if(btn == btnSubmit) {
-
+                EntityStudent student = new EntityStudent(
+                        fldMatricule.getText(),
+                        fldFirstname.getText(),
+                        fldLastname.getText(),
+                        Timestamp.valueOf(fldBirthdate.getText()),
+                        null
+                );
+                Ctrl_Student.save(cnx, student);
             }
         }
     }
